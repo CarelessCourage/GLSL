@@ -1,0 +1,67 @@
+/* Base */
+html {
+  --font-size: 9px;
+  font-weight: 400;
+}
+
+/* Typography */
+h1, h2, h3, p {
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+  margin: 0px 0px var(--space-intimate);
+  &:not(.display) {
+    max-width: clamp(0px, 60ch, 600px);
+  }
+}
+
+h1 { font-size: 5rem; font-weight: 800; letter-spacing: 0px;}
+h1.display { font-size: 20rem; line-height: 1 }
+
+h2 { font-size: 3rem; font-weight: 800; letter-spacing: 1px;}
+h3 { font-size: 1.5rem; }
+
+p { font-size: 1rem; line-height: 1.5; }
+p.caption {
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 200;
+}
+
+span {
+  color: var(--accent);
+  font-weight: bold;
+  transition: .4s;
+}
+
+/* Colors */
+html {
+  background: var(--background-20);
+  color: var(--foreground);
+}
+
+/* Space */
+:root {
+  --radius: 10px;
+  --space-xs: calc(var(--space) / 4);
+  --space-s: calc(var(--space) / 2);
+  --space: 20px;
+  --space-m: calc(var(--space) * 2);
+  --space-l: calc(var(--space) * 3);
+  --space-xl: calc(var(--space) * 4);
+}
+
+/* Border */
+:root {
+  --border-style: solid;
+  --border-size: 3px;
+  --border-color: var(--foreground, black);
+  --border: 
+    var(--border-style, solid) 
+    var(--border-size, 3px) 
+    var(--border-color);
+
+  --border-focus: solid 
+    var(--border-size, 3px) 
+    var(--link, blue);
+}

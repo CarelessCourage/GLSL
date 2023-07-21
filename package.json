@@ -10,14 +10,17 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@nuxthq/ui": "^2.6.0",
     "@types/node": "^18.16.19",
     "@types/three": "^0.154.0",
     "nuxt": "^3.6.5"
   },
   "dependencies": {
+    "@myriadjs/core": "^0.0.92",
     "@tresjs/cientos": "^2.3.0",
     "@tresjs/nuxt": "^1.0.1",
     "@tresjs/post-processing": "^0.3.0",
+    "sass": "^1.64.0",
     "three": "^0.154.0",
     "three-custom-shader-material": "^5.3.8",
     "vite-plugin-glsl": "^1.1.2"
