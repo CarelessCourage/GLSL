@@ -9,20 +9,17 @@ varying float vPattern;
 #define PI 3.1415926535897932384626433832795
 vec2 m = vec2(0.7, 0.8);
 
-float hash( in vec2 p ) 
-{
+float hash( in vec2 p ) {
     return fract(sin(p.x*15.32+p.y*5.78) * 43758.236237153);
 }
 
 
-vec2 hash2(vec2 p)
-{
+vec2 hash2(vec2 p) {
 	return vec2(hash(p*.754),hash(1.5743*p.yx+4.5891))-.5;
 }
 
 // Gabor/Voronoi mix 3x3 kernel (some artifacts for v=1.)
-float gavoronoi3(in vec2 p)
-{    
+float gavoronoi3(in vec2 p) {    
     vec2 ip = floor(p);
     vec2 fp = fract(p);
     float f = 3.*PI;//frequency
@@ -94,11 +91,7 @@ void main() {
 	float r = dot(nor(uv), light);
 
     vec3 newPosition = position + normal * clamp(r, 0.0, 0.3);
-
     vec4 modelPosition = modelMatrix * vec4(newPosition, 1.0);
-    //modelPosition.y += sin(modelPosition.x * uFrequency.x - uTime) * uAmplitude.x;
-    //modelPosition.x += cos(modelPosition.y * uFrequency.y - uTime) * uAmplitude.y;
-
     vec4 viewPosition = viewMatrix * modelPosition;
     gl_Position = projectionMatrix * viewPosition;
     vUv = uv;
