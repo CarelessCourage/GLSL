@@ -3,23 +3,22 @@
 import { myriad } from "@myriadjs/core"
 import "./style.css"
 
-onMounted(() => {
-  const m = myriad({
-  background: '#0c0915',
-  foreground: '#c0aea3',
+onMounted(() => myriad({
+  background: '#c0aea3',
+  foreground: '#0c0915',
   accents: ['#ab57ff'],
-}).attach().colors
+}).apply())
 
-console.log(m)
-})
-
-const people = ['Wade Cooper', 'Arlene Mccoy', 'Devon Webb', 'Tom Cook', 'Tanya Fox', 'Hellen Schmidt', 'Caroline Schultz', 'Mason Heaney', 'Claudie Smitham', 'Emil Schaefer']
+const people = ['Evolve', 'Impact', 'Cancer', 'Jonah']
 const selected = ref(people[0])
 </script>
 
 <template>
   <div  class="tres">
-    <Spiral />
+    <Spiral v-if="selected === 'Evolve'" />
+    <SDF v-if="selected === 'Impact'" />
+    <Folds v-if="selected === 'Cancer'" />
+    <Folds v-if="selected === 'Jonah'" :zoom="0.5"/>
 
     <div class="meta-island">
       <div class="github">github</div>
@@ -31,16 +30,22 @@ const selected = ref(people[0])
 
 <style>
 .meta-island {
-  position: absolute;
-  top: 0;
-  left: 0;
+  display: flex;
+  gap: var(--space-s);
 
-  background-color: var(--foreground);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  background-color: var(--background);
 
   padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  min-width: 20rem;
+  border-radius: var(--radius);
 
   justify-content: flex-start;
   z-index: 999;

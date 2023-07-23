@@ -3,6 +3,13 @@ import { Vector2, Vector4 } from 'three'
 import foldVertex from '../shaders/folds/vertex.glsl'
 import foldFragment from '../shaders/folds/fragment.glsl'
 
+defineProps({
+  zoom: {
+    type: Number,
+    default: 11,
+  },
+})
+
 const subdivisions = ref(260)
 
 const meshRef = ref<any>(null)
@@ -28,7 +35,7 @@ onLoop(({ elapsed }) => {
 <template>
   <div class="tres">
     <TresCanvas clear-color="#111" shadows alpha :windowSize="true">
-      <TresPerspectiveCamera :position="[0, 1, 11]" />
+      <TresPerspectiveCamera :position="[0, 1, zoom]" />
       <OrbitControls />
       <TresMesh v-if="true" ref="meshRef" :position="[0, 1, 0]">
         <TresIcosahedronGeometry :args="[2, subdivisions]" />
