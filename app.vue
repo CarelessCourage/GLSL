@@ -62,10 +62,11 @@ const selected = ref(people[0])
   gap: var(--space-s);
 
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: var(--space);
+  right: var(--space);
 
-  background-color: var(--background);
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
 
   padding: 1rem;
   display: flex;
