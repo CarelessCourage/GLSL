@@ -15,9 +15,9 @@ const shaders = [
   {label: 'Cancer', icon: 'i-heroicons-building-library', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
   {label: 'Jonah', icon: 'i-heroicons-finger-print', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
   {label: 'SDF', icon: 'i-heroicons-variable', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
-  //{label: 'Chrome', icon: 'i-heroicons-cube-transparent', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Chrome.vue'}
+  {label: 'Chrome', icon: 'i-heroicons-cube-transparent', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Chrome.vue'}
 ]
-const selected = ref(shaders[0])
+const selected = ref(shaders[5])
 </script>
 
 <template>

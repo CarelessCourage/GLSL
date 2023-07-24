@@ -89,6 +89,35 @@ vec3 camera(vec3 rayOrigin, vec3 rayTarget, vec2 screenPos, float lensLength) {
   return rayDirection;
 }
 
+float blinnPhongSpecular(
+  vec3 lightDirection,
+  vec3 viewDirection,
+  vec3 surfaceNormal,
+  float shininess) {
+
+  //Calculate Blinn-Phong power
+  vec3 H = normalize(viewDirection + lightDirection);
+  return pow(max(0.0, dot(surfaceNormal, H)), shininess);
+}
+
+vec3 pal( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d ) {
+  return a + b*cos( 6.28318*(c*t+d) );
+}
+
+vec3 spectrum(float n) {
+  return pal( n, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.33,0.67) );
+}
+
+const float GAMMA = 2.2;
+
+vec3 gamma(vec3 color, float g) {
+  return pow(color, vec3(g));
+}
+
+vec3 linearToScreen(vec3 linearRGB) {
+  return gamma(linearRGB, 1.0 / GAMMA);
+}
+
 //Some good references for this code:
 //A general overview of SDF: https://varun.ca/ray-march-sdf/
 //An indepth look at SDF: https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/#surface-normals-and-lighting
@@ -107,10 +136,42 @@ void main() {
 
   float collision = raymarch(rayOrigin, rayDirection);
 
-  // If the ray collides, draw the surface
+  vec3 lightPos = vec3(1, 1, 1);
+  vec3 tint = vec3(1.0, 1.0, 1.0); // color of the shape
+  
   if (collision > -0.5) {
-    vec3 normal = getNormal(rayOrigin + rayDirection * collision);
-    color = normal * 0.5 + 0.5;
+    // Determine the point of collision
+    vec3 pos = rayOrigin + rayDirection * collision;
+    vec3 normal = getNormal(pos);
+
+    // Calculate light intensity
+    vec3 eyeDirection = normalize(rayOrigin - pos);
+    vec3 lightDirection = normalize(lightPos - pos);
+    float power = blinnPhongSpecular(lightDirection, eyeDirection, normal, 0.5);
+    vec3 baseColor = power * tint;
+
+    //--------------------------------------------
+    // Iridescent lighting
+    vec3 reflection = reflect(rayDirection, normal);
+    vec3 dome = vec3(0, 1, 0);
+    // base layer
+    vec3 perturb = sin(pos * 10.);
+    color = spectrum(dot(normal + perturb * .05, eyeDirection) * 2.);
+    // specular
+    float specular = clamp(dot(reflection, lightDirection), 0., 1.);
+    specular = pow((sin(specular * 20. - 3.) * .5 + .5) + .1, 32.) * specular;
+    specular *= .1;
+    specular += pow(clamp(dot(reflection, lightDirection), 0., 1.) + .3, 8.) * .1;
+    // shadow
+    float shadow = pow(clamp(dot(normal, dome) * .5 + 1.2, 0., 1.), 3.);
+    color = color * shadow + specular;
+
+    //--------------------------------------------
+    // mix blinn phong lighting and iridescent lighting
+    float mixBaseAndIridescent = 0.5;
+    color = mix(baseColor, color, mixBaseAndIridescent);
+    // gamma correction
+    color = linearToScreen(color);
   }
 
   gl_FragColor = vec4(color, 1);
