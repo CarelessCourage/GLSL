@@ -4,31 +4,106 @@ import { myriad, rgbStrippedFormat } from "@myriadjs/core"
 import "./style.css"
 
 onMounted(() => myriad({
-  background: '#c0aea3',
+  background: '#f9ffff',
   foreground: '#0c0915',
   accents: ['#ab57ff'],
 }).apply(undefined, rgbStrippedFormat))
 
 const people = ['Evolve', 'Impact', 'Cancer', 'Jonah']
-const selected = ref(people[0])
+const shaders = [
+  {label: 'Impact', icon: 'i-heroicons-sparkles', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
+  {label: 'Evolve', icon: 'i-heroicons-moon', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Spiral.vue'},
+  {label: 'Cancer', icon: 'i-heroicons-building-library', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
+  {label: 'Jonah', icon: 'i-heroicons-cube-transparent', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
+]
+const selected = ref(shaders[0])
 </script>
 
 <template>
   <div  class="tres">
-    <Spiral v-if="selected === 'Evolve'" />
-    <SDF v-if="selected === 'Impact'" />
-    <Folds v-if="selected === 'Cancer'" />
-    <Folds v-if="selected === 'Jonah'" :zoom="0.5"/>
+    <Spiral v-if="selected.label === 'Evolve'" />
+    <SDF v-if="selected.label === 'Impact'" />
+    <Folds v-if="selected.label === 'Cancer'" />
+    <Folds v-if="selected.label === 'Jonah'" :zoom="0.5"/>
 
     <div class="meta-island">
-      <div class="github">github</div>
-      <USelectMenu v-model="selected" :options="people" />
+      <NuxtLink :to="selected.url" class="github">
+        <UIcon name="i-heroicons-code-bracket-square" />
+      </NuxtLink>
+      <div class="controls">
+        <div class="select">
+          <USelectMenu v-model="selected" :options="shaders">
+            <template #label>
+              <UIcon v-if="selected.icon" :name="selected.icon" class="w-4 h-4" />
+              {{ selected.label }}
+            </template>
+          </USelectMenu>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 
 <style>
+.meta-island {
+  position: absolute;
+  top: var(--space);
+  right: var(--space);
+
+  display: flex;
+  align-items: center;
+
+  z-index: 999;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+  border-radius: var(--radius);
+  height: var(--space-l);
+  padding: 0px var(--space-s);
+}
+
+.controls .select li {
+  cursor: pointer;
+}
+
+.controls button {
+  cursor: pointer;
+}
+
+.github {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+
+  font-size: 2rem;
+
+  background: rgb(var(--background-10));
+  height: var(--space-l);
+  padding: 0px var(--space-s);
+  border-radius: var(--radius);
+
+  transform-origin: .2s;
+}
+
+.github:hover {
+  background: rgb(var(--accent));
+  color: rgb(var(--background));
+}
+
+.github:active {
+  background: rgb(var(--accent));
+}
+
+.github span {
+  transition: .2s;
+}
+
 .tres {
   --color-primary-50: var(--accent);
   --color-primary-100: var(--accent);
@@ -54,29 +129,5 @@ const selected = ref(people[0])
   --color-gray-800: var(--foreground-10);
   --color-gray-900: var(--foreground);
   --color-gray-950: var(--foreground);
-}
-
-
-.meta-island {
-  display: flex;
-  gap: var(--space-s);
-
-  position: absolute;
-  bottom: var(--space);
-  right: var(--space);
-
-  background-color: rgb(var(--background));
-  color: rgb(var(--foreground));
-
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  min-width: 20rem;
-  border-radius: var(--radius);
-
-  justify-content: flex-start;
-  z-index: 999;
 }
 </style>

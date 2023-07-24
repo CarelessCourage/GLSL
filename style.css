@@ -42,7 +42,7 @@ html {
 
 /* Space */
 :root {
-  --radius: 10px;
+  --radius: 2px;
   --space-xs: calc(var(--space) / 4);
   --space-s: calc(var(--space) / 2);
   --space: 20px;

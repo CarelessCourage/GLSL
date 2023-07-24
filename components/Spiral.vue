@@ -1,27 +1,20 @@
 <script setup lang="ts">
-import { Vector2, Vector4 } from 'three'
 import foldVertex from '../shaders/spiral/vertex.glsl'
 import foldFragment from '../shaders/spiral/fragment.glsl'
 
 const subdivisions = ref(260)
 
 const meshRef = ref<any>(null)
-const materialRef = ref<any>(null)
+  const materialRef = ref<any>(null)
 const uniforms = {
   uTime: { value: 0 },
-  uAmplitude: { value: new Vector2(0.1, 0.1) },
-  uFrequency: { value: new Vector2(20, 5) },
-  resolution: { value: new Vector4(0, 0, 0, 0) },
 }
 
 const { onLoop, resume } = useRenderLoop()
 resume()
 onLoop(({ elapsed }) => {
-  if (meshRef.value) {
-    meshRef.value.material.uniforms.uTime.value = elapsed
-    meshRef.value.material.uniforms.resolution.value.x = window.innerWidth
-    meshRef.value.material.uniforms.resolution.value.y = window.innerHeight
-  }
+  if (!meshRef.value) return
+  meshRef.value.material.uniforms.uTime.value = elapsed
 })
 </script>
 
