@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import vertex from '../shaders/templates/sdf/vertex.glsl'
-import fragment from '../shaders/templates/sdf/fragment.glsl'
+import vertex from '../shaders/chrome/vertex.glsl'
+import fragment from '../shaders/chrome/fragment.glsl'
 
 const width = ref(10)
 const height = ref(10)

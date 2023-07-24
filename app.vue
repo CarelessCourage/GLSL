@@ -13,10 +13,11 @@ const shaders = [
   {label: 'Impact', icon: 'i-heroicons-sparkles', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
   {label: 'Evolve', icon: 'i-heroicons-moon', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Spiral.vue'},
   {label: 'Cancer', icon: 'i-heroicons-building-library', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
-  {label: 'Jonah', icon: 'i-heroicons-cube-transparent', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
-  {label: 'SDF', icon: 'i-heroicons-cube-transparent', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
+  {label: 'Jonah', icon: 'i-heroicons-finger-print', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
+  {label: 'SDF', icon: 'i-heroicons-variable', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
+  //{label: 'Chrome', icon: 'i-heroicons-cube-transparent', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Chrome.vue'}
 ]
-const selected = ref(shaders[4])
+const selected = ref(shaders[0])
 </script>
 
 <template>
@@ -26,6 +27,7 @@ const selected = ref(shaders[4])
     <Folds v-if="selected.label === 'Cancer'" />
     <Folds v-if="selected.label === 'Jonah'" :zoom="0.5"/>
     <SDF v-if="selected.label === 'SDF'" />
+    <Chrome v-if="selected.label === 'Chrome'" />
 
     <div class="meta-island">
       <NuxtLink :to="selected.url" class="github">
