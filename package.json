@@ -16,7 +16,7 @@
     "nuxt": "^3.6.5"
   },
   "dependencies": {
-    "@myriadjs/core": "^0.0.93",
+    "@myriadjs/core": "^0.0.942",
     "@tresjs/cientos": "^2.3.0",
     "@tresjs/nuxt": "^1.0.1",
     "@tresjs/post-processing": "^0.3.0",
