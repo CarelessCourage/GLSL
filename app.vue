@@ -9,22 +9,23 @@ onMounted(() => myriad({
   accents: ['#ab57ff'],
 }).apply(undefined, rgbStrippedFormat))
 
-const people = ['Evolve', 'Impact', 'Cancer', 'Jonah']
 const shaders = [
   {label: 'Impact', icon: 'i-heroicons-sparkles', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
   {label: 'Evolve', icon: 'i-heroicons-moon', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Spiral.vue'},
   {label: 'Cancer', icon: 'i-heroicons-building-library', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
   {label: 'Jonah', icon: 'i-heroicons-cube-transparent', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
+  {label: 'SDF', icon: 'i-heroicons-cube-transparent', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
 ]
-const selected = ref(shaders[0])
+const selected = ref(shaders[4])
 </script>
 
 <template>
   <div  class="tres">
     <Spiral v-if="selected.label === 'Evolve'" />
-    <SDF v-if="selected.label === 'Impact'" />
+    <Impact v-if="selected.label === 'Impact'" />
     <Folds v-if="selected.label === 'Cancer'" />
     <Folds v-if="selected.label === 'Jonah'" :zoom="0.5"/>
+    <SDF v-if="selected.label === 'SDF'" />
 
     <div class="meta-island">
       <NuxtLink :to="selected.url" class="github">

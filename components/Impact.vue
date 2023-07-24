@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import vertex from '../shaders/chrome/vertex.glsl'
-import fragment from '../shaders/chrome/fragment.glsl'
+import vertex from '../shaders/impact/vertex.glsl'
+import fragment from '../shaders/impact/fragment.glsl'
 
 const width = ref(10)
 const height = ref(10)
@@ -23,7 +23,7 @@ onLoop(({ elapsed }) => {
 <template>
   <div class="tres">
     <TresCanvas clear-color="#111" shadows alpha :windowSize="true">
-      <TresPerspectiveCamera :position="[0, 0, 11]" />
+      <TresPerspectiveCamera :position="[0, 1, 11]" />
       <TresMesh v-if="true" ref="meshRef" :position="[0, 0, 0]">
         <TresPlaneGeometry :args="[width, height, subdivisions, subdivisions]" />    
         <TresShaderMaterial
