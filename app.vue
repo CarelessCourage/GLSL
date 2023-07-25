@@ -10,6 +10,7 @@ onMounted(() => myriad({
 }).apply(undefined, rgbStrippedFormat))
 
 const shaders = [
+  //{label: 'Experiment', icon: 'i-heroicons-code-bracket-square', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Experiment.vue'},
   {label: 'Impact', icon: 'i-heroicons-sparkles', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
   {label: 'Evolve', icon: 'i-heroicons-moon', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Spiral.vue'},
   {label: 'Cancer', icon: 'i-heroicons-building-library', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
@@ -17,7 +18,7 @@ const shaders = [
   {label: 'SDF', icon: 'i-heroicons-variable', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
   {label: 'Chrome', icon: 'i-heroicons-cube-transparent', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Chrome.vue'}
 ]
-const selected = ref(shaders[5])
+const selected = ref(shaders[0])
 </script>
 
 <template>
@@ -28,6 +29,7 @@ const selected = ref(shaders[5])
     <Folds v-if="selected.label === 'Jonah'" :zoom="0.5"/>
     <SDF v-if="selected.label === 'SDF'" />
     <Chrome v-if="selected.label === 'Chrome'" />
+    <Experiment v-if="selected.label === 'Experiment'" />
 
     <div class="meta-island">
       <NuxtLink :to="selected.url" class="github">
