@@ -31,16 +31,16 @@ float sdTorus( vec3 p, vec2 t ) {
 }
 
 //examples of how to combine shapes
-float sdUnion( float d1, float d2 ) { return min(d1,d2); }
-float sdSubtraction( float d1, float d2 ) { return max(-d1,d2); }
-float sdIntersection( float d1, float d2 ) { return max(d1,d2); }
+float combine( float d1, float d2 ) { return min(d1, d2); }
+float subtract( float d1, float d2 ) { return max(d1, -d2); }
+float intersect( float d1, float d2 ) { return max(d1, d2); }
 
 float scene(vec3 p) {
     //add all shapes togheter here
     vec3 p1 = rotate(p, vec3(1.0, 1.0, 1.0), uTime)/2.0;
     float torus = sdTorus(p1, vec2(1.0, 0.65));
     float sphere = sdSphere(p1, 0.9);
-    return max(-torus, sphere);
+    return subtract(sphere, torus);
 }
 
 vec3 getNormal(vec3 p) {
