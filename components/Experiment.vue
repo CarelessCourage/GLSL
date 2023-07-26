@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { rotate } from './Experiment/rotate';
 import { getNormal } from './Experiment/normal';
-import { ring, sphere, combine } from './Experiment/shapes';
+import { ring, sphere, torus, combine, subtract } from './Experiment/shapes';
 
 function SDFScene() {
-  return combine(sphere(rotate, 0.5), ring(rotate));
+  return subtract(
+    sphere(rotate, 1.5),
+    torus(rotate, [0.7, 1.0])
+  );
+
 }
 
 function SDFMaterial() {
