@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import FBO from './FBO.vue'
 import { OrbitControls } from '@tresjs/cientos'
 import { TresCanvas } from '@tresjs/core'
 import { SRGBColorSpace, NoToneMapping, BasicShadowMap } from 'three'

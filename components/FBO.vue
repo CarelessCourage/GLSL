@@ -52,7 +52,7 @@ function getColumn(index: number) {
 }
 
 function getRow(index: number) {
-  return -3 - (balls.y / 2) + index * 2
+  return -4.5 - (balls.y / 2) + index * 2
 }
 
 const meshRef = ref<any>(null)
@@ -169,7 +169,7 @@ onLoop(() => {
     </TresGroup>
   </TresGroup>
   
-  <TresMesh ref="meshRef" :position="[0, 2, 0]">
+  <TresMesh ref="meshRef" :position="[0, 0, 0]">
     <TresTorusGeometry :args="[1.5, 0.6, 70, 70]" />
     <TresShaderMaterial
       :vertex-shader="vertex"

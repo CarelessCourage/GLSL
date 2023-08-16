@@ -7,106 +7,16 @@ onMounted(() => myriad({
   foreground: '#0c0915',
   accents: ['#ab57ff'],
 }).apply(undefined, rgbStrippedFormat))
-
-const shaders = [
-  //{label: 'Light', icon: 'i-heroicons-sun', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
-  {label: 'Impact', icon: 'i-heroicons-sparkles', path: "/sdf", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
-  {label: 'Evolve', icon: 'i-heroicons-moon', path: "/spiral", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Spiral.vue'},
-  {label: 'Cancer', icon: 'i-heroicons-building-library', path: "/folds", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
-  {label: 'Jonah', icon: 'i-heroicons-finger-print', path: "/folds", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
-  {label: 'SDF', icon: 'i-heroicons-variable', path: "sdf", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
-  {label: 'Chrome', icon: 'i-heroicons-cube-transparent', path: "chrome", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Chrome.vue'},
-  {label: 'Experiment', icon: 'i-heroicons-code-bracket-square', path: "experiment", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Experiment.vue'},
-]
-
-const selected = ref(shaders[0])
-
-watch(selected, (val) => {
-  navigateTo({
-    path: val.path,
-  })
-})
 </script>
 
 
 <template>
-  <NuxtPage />
-  <div class="meta-island">
-      <NuxtLink :to="selected.url" class="github">
-        <UIcon name="i-heroicons-code-bracket-square" />
-      </NuxtLink>
-      <div class="controls">
-        <div class="select">
-          <USelectMenu v-model="selected" :options="shaders">
-            <template #label>
-              <UIcon v-if="selected.icon" :name="selected.icon" class="w-4 h-4" />
-              {{ selected.label }}
-            </template>
-          </USelectMenu>
-        </div>
-      </div>
-    </div>
+  <NuxtLayout name="default">
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
 <style>
-.meta-island {
-  position: absolute;
-  top: var(--space);
-  right: var(--space);
-
-  display: flex;
-  align-items: center;
-
-  z-index: 999;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  background-color: rgb(var(--background));
-  color: rgb(var(--foreground));
-  border-radius: var(--radius);
-  height: var(--space-l);
-  padding: 0px var(--space-s);
-}
-
-.controls .select li {
-  cursor: pointer;
-}
-
-.controls button {
-  cursor: pointer;
-}
-
-.github {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-xs);
-
-  font-size: 2rem;
-
-  background: rgb(var(--background-10));
-  height: var(--space-l);
-  padding: 0px var(--space-s);
-  border-radius: var(--radius);
-
-  transform-origin: .2s;
-}
-
-.github:hover {
-  background: rgb(var(--accent));
-  color: rgb(var(--background));
-}
-
-.github:active {
-  background: rgb(var(--accent));
-}
-
-.github span {
-  transition: .2s;
-}
-
 .tres {
   --color-primary-50: var(--accent);
   --color-primary-100: var(--accent);
