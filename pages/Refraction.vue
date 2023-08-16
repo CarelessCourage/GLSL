@@ -11,9 +11,9 @@ const gl = {
   windowSize: true,
 }
 
-onUnmounted(() => {
+definePageMeta({
+  layout: 'hidden',
 })
-
 </script>
 
 <template>

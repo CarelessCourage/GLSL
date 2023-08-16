@@ -1,13 +1,15 @@
 <script setup lang="ts">
+const repoULR = 'https://github.com/CarelessCourage/GLSL/tree/main/pages'
+
 const shaders = [
   //{label: 'Light', icon: 'i-heroicons-sun', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
-  {label: 'Impact', icon: 'i-heroicons-sparkles', path: "/impact", url: 'https://github.com/CarelessCourage/GLSL/blob/main/pages/impact.vue'},
-  {label: 'Evolve', icon: 'i-heroicons-moon', path: "/spiral", url: 'https://github.com/CarelessCourage/GLSL/blob/main/pages/Spiral.vue'},
-  //{label: 'Refraction', icon: 'i-heroicons-cube-transparent', path: "/refraction", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Spiral.vue'},
-  {label: 'Jonah', icon: 'i-heroicons-finger-print', path: "/folds", url: 'https://github.com/CarelessCourage/GLSL/blob/main/pages/Folds.vue'},
-  {label: 'SDF', icon: 'i-heroicons-variable', path: "/sdf", url: 'https://github.com/CarelessCourage/GLSL/blob/main/pages/SDF.vue'},
-  {label: 'Chrome', icon: 'i-heroicons-cube-transparent', path: "/chrome", url: 'https://github.com/CarelessCourage/GLSL/blob/main/pages/Chrome.vue'},
-  {label: 'Experiment', icon: 'i-heroicons-code-bracket-square', path: "/experiment", url: 'https://github.com/CarelessCourage/GLSL/blob/main/pages/Experiment.vue'},
+  {label: 'Impact', icon: 'i-heroicons-sparkles', path: "/impact", url: `${repoULR}/Impact.vue`},
+  {label: 'Evolve', icon: 'i-heroicons-moon', path: "/spiral", url: `${repoULR}/Spiral.vue`},
+  //{label: 'Refraction', icon: 'i-heroicons-cube-transparent', path: "/refraction", url: `${repoULR}/Refraction.vue`},
+  {label: 'Jonah', icon: 'i-heroicons-finger-print', path: "/folds", url: `${repoULR}/Folds.vue`},
+  {label: 'SDF', icon: 'i-heroicons-variable', path: "/sdf", url: `${repoULR}/SDF.vue`},
+  {label: 'Chrome', icon: 'i-heroicons-cube-transparent', path: "/chrome", url: `${repoULR}/Chrome.vue`},
+  {label: 'Experiment', icon: 'i-heroicons-code-bracket-square', path: "/experiment", url: `${repoULR}/Experiment.vue`},
 ]
 
 const selected = ref(shaders[0])
@@ -28,14 +30,13 @@ watch(selected, (val) => {
 })
 </script>
 
-
 <template>
   <slot />
   <div class="meta-island">
     <NuxtLink :to="selected.url" class="github">
       <UIcon name="i-heroicons-code-bracket-square" />
     </NuxtLink>
-    <div class="controls">
+    <div class="controls" v-if="true">
       <div class="select">
         <USelectMenu v-model="selected" :options="shaders">
           <template #label>
@@ -47,7 +48,6 @@ watch(selected, (val) => {
     </div>
   </div>
 </template>
-
 
 <style>
 .meta-island {
