@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { rotate } from './Experiment/rotate';
-import { getNormal } from './Experiment/normal';
-import { ring, sphere, torus, combine, subtract } from './Experiment/shapes';
+import { rotate } from '@/components/Experiment/rotate';
+import { getNormal } from '@/components/Experiment/normal';
+import { ring, sphere, torus, combine, subtract } from '@/components/Experiment/shapes';
 
 function SDFScene() {
   return subtract(

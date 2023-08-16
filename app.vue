@@ -1,4 +1,3 @@
-// App.vue
 <script setup lang="ts">
 import { myriad, rgbStrippedFormat } from "@myriadjs/core"
 import "./style.css"
@@ -11,29 +10,28 @@ onMounted(() => myriad({
 
 const shaders = [
   //{label: 'Light', icon: 'i-heroicons-sun', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
-  {label: 'Impact', icon: 'i-heroicons-sparkles', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
-  {label: 'Evolve', icon: 'i-heroicons-moon', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Spiral.vue'},
-  {label: 'Cancer', icon: 'i-heroicons-building-library', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
-  {label: 'Jonah', icon: 'i-heroicons-finger-print', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
-  {label: 'SDF', icon: 'i-heroicons-variable', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
-  {label: 'Chrome', icon: 'i-heroicons-cube-transparent', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Chrome.vue'},
-  {label: 'Experiment', icon: 'i-heroicons-code-bracket-square', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Experiment.vue'},
+  {label: 'Impact', icon: 'i-heroicons-sparkles', path: "/sdf", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
+  {label: 'Evolve', icon: 'i-heroicons-moon', path: "/spiral", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Spiral.vue'},
+  {label: 'Cancer', icon: 'i-heroicons-building-library', path: "/folds", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
+  {label: 'Jonah', icon: 'i-heroicons-finger-print', path: "/folds", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Folds.vue'},
+  {label: 'SDF', icon: 'i-heroicons-variable', path: "sdf", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
+  {label: 'Chrome', icon: 'i-heroicons-cube-transparent', path: "chrome", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Chrome.vue'},
+  {label: 'Experiment', icon: 'i-heroicons-code-bracket-square', path: "experiment", url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/Experiment.vue'},
 ]
+
 const selected = ref(shaders[0])
+
+watch(selected, (val) => {
+  navigateTo({
+    path: val.path,
+  })
+})
 </script>
 
-<template>
-  <div  class="tres">
-    <Spiral v-if="selected.label === 'Evolve'" />
-    <Impact v-if="selected.label === 'Impact'" />
-    <Folds v-if="selected.label === 'Cancer'" />
-    <Folds v-if="selected.label === 'Jonah'" :zoom="0.5"/>
-    <SDF v-if="selected.label === 'SDF'" />
-    <Chrome v-if="selected.label === 'Chrome'" />
-    <Experiment v-if="selected.label === 'Experiment'" />
-    <Light v-if="selected.label === 'Light'" />
 
-    <div class="meta-island">
+<template>
+  <NuxtPage />
+  <div class="meta-island">
       <NuxtLink :to="selected.url" class="github">
         <UIcon name="i-heroicons-code-bracket-square" />
       </NuxtLink>
@@ -48,9 +46,7 @@ const selected = ref(shaders[0])
         </div>
       </div>
     </div>
-  </div>
 </template>
-
 
 <style>
 .meta-island {

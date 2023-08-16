@@ -5,7 +5,7 @@ import foldFragment from '../shaders/folds/fragment.glsl'
 defineProps({
   zoom: {
     type: Number,
-    default: 11,
+    default: 0.5,
   },
 })
 
