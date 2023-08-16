@@ -1,12 +1,27 @@
-export const useFBO = () => {
-  const tres = useTres()
-  const renderer = useRenderer({
-    antialias: true,
-    alpha: true,
+import * as THREE from 'three'
+import { useTresContext } from '@tresjs/core'
+
+export const useFBO = (width?: number, height?: number, dpr = 500) => {
+  const state = useTresContext()
+  const renderTarget = shallowRef<THREE.WebGLRenderTarget>(new THREE.WebGLRenderTarget(10 * dpr, 10 * dpr))
+  
+  const sizes = computed(() => {
+    const sizes = state.sizes
+    const _width = width ? width * dpr : sizes.width.value
+    const _height = height ? height * dpr : sizes.height.value
+    return {
+      width: _width,
+      height: _height,
+    }
+  })
+  
+  watch(sizes, val => {
+    renderTarget.value = new THREE.WebGLRenderTarget(val.width, val.height)
   })
 
-  return {
-    renderer,
-    tres
-  }
+  onBeforeUnmount(() => {
+    renderTarget.value.dispose()
+  })
+  
+  return renderTarget
 }

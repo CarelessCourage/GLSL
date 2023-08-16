@@ -7,31 +7,6 @@ import { useTweakPane } from '@tresjs/cientos'
 import vertex from '../shaders/refraction/vertex.glsl'
 import fragment from '../shaders/refraction/fragment.glsl'
 
-const useFBO = (width?: number, height?: number, dpr = 500) => {
-  const state = useTresContext()
-  const renderTarget = shallowRef<THREE.WebGLRenderTarget>(new THREE.WebGLRenderTarget(10 * dpr, 10 * dpr))
-  
-  const sizes = computed(() => {
-    const sizes = state.sizes
-    const _width = width ? width * dpr : sizes.width.value
-    const _height = height ? height * dpr : sizes.height.value
-    return {
-      width: _width,
-      height: _height,
-    }
-  })
-  
-  watch(sizes, val => {
-    renderTarget.value = new THREE.WebGLRenderTarget(val.width, val.height)
-  })
-
-  onBeforeUnmount(() => {
-    renderTarget.value.dispose()
-  })
-  
-  return renderTarget
-}
-
 const { pane } = useTweakPane()
 
 const balls = reactive({x: 5, y: 5 })
@@ -105,21 +80,85 @@ f2.addInput(controls, 'diffuseness', {
   max: 5,
 })
 
-const f3 = pane.addFolder({
+const light = pane.addFolder({
   title: 'Light',
   expanded: true,   // optional
 });
 
-f3.addInput(controls, 'shininess', {
+light.addInput(controls, 'shininess', {
   step: 0.05,
   min: 0.6,
   max: 70,
 })
 
-f3.addInput(controls, 'fresnel', {
+light.addInput(controls, 'fresnel', {
   step: 0.05,
   min: 0.6,
   max: 6,
+})
+
+const ior = pane.addFolder({
+  title: 'ior',
+  expanded: true,
+});
+
+ior.addInput(controls.ior, 'r', {
+  step: 0.05,
+  min: 1.0,
+  max: 2.33,
+})
+
+ior.addInput(controls.ior, 'y', {
+  step: 0.05,
+  min: 1.0,
+  max: 2.33,
+})
+
+ior.addInput(controls.ior, 'g', {
+  step: 0.05,
+  min: 1.0,
+  max: 2.33,
+})
+
+ior.addInput(controls.ior, 'c', {
+  step: 0.05,
+  min: 1.0,
+  max: 2.33,
+})
+
+ior.addInput(controls.ior, 'b', {
+  step: 0.05,
+  min: 1.0,
+  max: 2.33,
+})
+
+ior.addInput(controls.ior, 'p', {
+  step: 0.05,
+  min: 1.0,
+  max: 2.33,
+})
+
+const other = pane.addFolder({
+  title: 'other',
+  expanded: true,
+});
+
+other.addInput(controls, 'saturation', {
+  step: 0.05,
+  min: 1.0,
+  max: 1.25,
+})
+
+other.addInput(controls, 'chromaticAberration', {
+  step: 0.05,
+  min: 0.0,
+  max: 1.50,
+})
+
+other.addInput(controls, 'refraction', {
+  step: 0.05,
+  min: 0.0,
+  max: 1.0,
 })
 
 const state = useTresContext()
