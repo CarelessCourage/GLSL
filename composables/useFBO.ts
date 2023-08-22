@@ -5,7 +5,7 @@ export const useFBO = (width?: number, height?: number, dpr = 500) => {
   const state = useTresContext()
   const renderTarget = shallowRef<THREE.WebGLRenderTarget>(new THREE.WebGLRenderTarget(10 * dpr, 10 * dpr))
   
-  const sizes = computed(() => {
+  const size = computed(() => {
     const sizes = state.sizes
     const _width = width ? width * dpr : sizes.width.value
     const _height = height ? height * dpr : sizes.height.value
@@ -15,7 +15,7 @@ export const useFBO = (width?: number, height?: number, dpr = 500) => {
     }
   })
   
-  watch(sizes, val => {
+  watch(size, val => {
     renderTarget.value = new THREE.WebGLRenderTarget(val.width, val.height)
   })
 
