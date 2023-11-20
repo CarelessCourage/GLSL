@@ -3,6 +3,7 @@ const repoULR = 'https://github.com/CarelessCourage/GLSL/tree/main/pages'
 
 const shaders = [
   //{label: 'Light', icon: 'i-heroicons-sun', url: 'https://github.com/CarelessCourage/GLSL/blob/main/components/SDF.vue'},
+  {label: 'Sion', icon: 'i-heroicons-code-bracket-square', path: "/sion", url: `${repoULR}/Sion.vue`},
   {label: 'Impact', icon: 'i-heroicons-sparkles', path: "/impact", url: `${repoULR}/Impact.vue`},
   {label: 'Evolve', icon: 'i-heroicons-moon', path: "/spiral", url: `${repoULR}/Spiral.vue`},
   //{label: 'Refraction', icon: 'i-heroicons-cube-transparent', path: "/refraction", url: `${repoULR}/Refraction.vue`},

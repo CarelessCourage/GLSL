@@ -1,3 +1,24 @@
+:root {
+  --background: 249 255 255;
+  --background-10: 225 230 232;
+  --background-20: 209 213 215;
+  --background-30: 194 198 201;
+  --foreground: 12 9 21;
+  --foreground-10: 83 83 91;
+  --foreground-20: 154 157 161;
+  --foreground-30: 178 181 185;
+  --accent: 163 72 255;
+  --accent-contrast: 12 9 21;
+  --accent-10: 110 50 173;
+  --accent-20: 95 44 150;
+  --accent-30: 80 37 126;
+  --accent-40: 65 31 103;
+  --accent-50: 50 25 80;
+  --accent-60: 35 18 56;
+  color: var(--foreground);
+}
+
+
 /* Base */
 html {
   --font-size: 9px;
@@ -31,7 +52,6 @@ p.caption {
 span {
   color: var(--accent);
   font-weight: bold;
-  transition: .4s;
 }
 
 /* Colors */
