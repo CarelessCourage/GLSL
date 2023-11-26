@@ -5,17 +5,14 @@ import foldFragment from '../shaders/sion/fragment.glsl'
 
 const subdivisions = ref(260)
 const blur = ref(0.001)
-
-const circlesx = ref(Array(10).map(() => {
-  return new Vector3(0.0, 0.0, 0.0)
-}))
+const size = ref(0.4)
 
 const circles = ref([
+  new Vector3( -0.0, 0.0, size.value ),
   new Vector3( 0.0, 0.0, 0.0 ),
   new Vector3( 0.0, 0.0, 0.0 ),
   new Vector3( 0.0, 0.0, 0.0 ),
   new Vector3( 0.0, 0.0, 0.0 ),
-  new Vector3( 0.0, 0.0, 0.5 ),
   new Vector3( 0.0, 0.0, 0.0 ),
   new Vector3( 0.0, 0.0, 0.0 ),
   new Vector3( 0.0, 0.0, 0.0 ),
@@ -23,11 +20,19 @@ const circles = ref([
   new Vector3( 0.0, 0.0, 0.0 )
 ])
 
+watch(size, () => {
+  circles.value[0].setZ(size.value)
+})
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max)
+}
+
 function randomizeCircles(amount: number) {
   for (let i = 0; i < amount; i++) {
     circles.value[i].setX(Math.random() * 2.0 - 1.0)
     circles.value[i].setY(Math.random() * 2.0 - 1.0)
-    circles.value[i].setZ(Math.random())
+    circles.value[i].setZ(clamp(Math.random() / 2.0, 0.005, 0.4))
   }
 }
 
@@ -54,7 +59,9 @@ onLoop(({ elapsed }) => {
   <div class="pane">
     <p>blur: {{ blur }}</p>
     <URange v-model="blur" name="range" :min="0.001" :max="1.0" :step="0.001" />
-    <UButton @click="() => randomizeCircles(3)">Rand</UButton>
+    <p>size: {{ size }}</p>
+    <URange v-model="size" name="range" :min="0.1" :max="1.0" :step="0.001" />
+    <UButton @click="() => randomizeCircles(6)">Rand</UButton>
   </div>
   <div class="tres">
     <TresCanvas clear-color="#111" shadows alpha :windowSize="true">

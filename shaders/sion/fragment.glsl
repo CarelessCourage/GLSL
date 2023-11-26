@@ -8,88 +8,115 @@ uniform vec3 uCircles[10];
 varying vec2 vUv;
 varying vec3 vNormal;
 
-// for (int i = 0; i < 10; i++) {
-//     float t = float(i) / 10.0;
-//     float x = sin(uTime + t * 3.1415 * 2.0) * 0.5;
-//     float y = cos(uTime + t * 3.1415 * 2.0) * 0.5;
-//     float d = drawCircle(uv, vec2(x, y), 0.1);
-//     d3 = max(d3, d);
+float map(float value, float min1, float max1, float min2, float max2) {
+    // Convert the current value to a percentage
+    // 0% - min1, 100% - max1
+    //float perc = (value - min1) / (max1 - min1);
+
+    // Do the same operation backwards with min2 and max2
+    //float value = perc * (max2 - min2) + min2;
+    return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+}
+
+// float clamp(float value, float min, float max) {
+//     return min(max(value, min), max);
 // }
 
-//function to draw a circle at a spot
-float drawCircle(vec2 uv, vec3 circle){
+float drawCircle(vec2 uv, vec3 circle, float blur){
     float d = length(uv - circle.xy);
-    float r = circle.z + uBlur;
-    float c = smoothstep(r, r - uBlur, d);
-    //float color = c * d;
-    //float dist = distance(uv, pos);
-    //vec2 circleUV = vec2(dist / radius);
-    return c;
+    float radius = circle.z + blur;
+    return smoothstep(radius, radius - blur, d);
 }
 
-float noise(vec2 co){
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+float drawCircle2(vec2 uv, vec3 circle, float blur){
+    float d = length(uv - circle.xy);
+    float radius = circle.z;
+    return smoothstep(radius, radius - blur * 3.5, d);
 }
 
-float randRange2(vec2 co) {
-    float random = noise(co + vec2(uSeed));
-    return -1.0 + random * (1.0 - -1.0);
+vec3 ColorSprite(vec2 uv, vec3 circle) {
+    float blur = 0.122;
+    float c = drawCircle2(uv, circle, blur);
+    if (c > 0.) {
+        return vec3(vUv.x * c, vUv.y * c, 1.0 * c);
+    }
 }
 
-float randRange(vec2 co) {
-    float a = 12.9898;
-    float b = 78.233;
-    float c = 43758.5453;
-    float dt= dot(co.xy ,vec2(a,b));
-    float sn= mod(dt,3.14);
-    return fract(sin(sn + uSeed) * c);
+float remap(float value, float oldMin, float oldMax, float newMin, float newMax) {
+    return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;
 }
 
-// float drawRandomCircles(vec2 uv) {
-//     float maxD = 0.0;
-//     for (int i = 0; i < int(1); i++) {
-//         float x = randRange(vec2(uv.x, float(i)));
-//         float y = randRange(vec2(uv.y, float(i)));
-//         float radius = clamp(randRange(vec2(x, y)) * 0.5, 1.0, 6.0);
-//         float d = drawCircle(uv, vec2(x, y), radius);
-//         maxD = max(maxD, d);
-//     }
-//     return maxD;
-// }
+vec3 DisplaceSprite(vec2 uv, vec3 circle) {
+    float radius = circle.z;
 
 
-float random (vec2 st) {
-    return fract(sin(dot(st.xy,
-                         vec2(12.9898,78.233)))*
-        43758.5453123);
+    float from = circle.x - radius * 1.5;
+    float to = circle.x + radius * 2.5;
+
+    float UvX = remap(uv.x + radius * 1.5, from, to, -1.0, 1.0);
+    float UvY = remap(uv.y + radius * 1.5, from, to, -1.0, 1.0);
+
+    vec2 localUV = vec2(UvX, UvY);
+    
+    float blur = uBlur; // 0.122;
+    float c = drawCircle2(uv, circle, blur);
+    if (c > 0.) {
+        return vec3(localUV.x * c, localUV.y * c, localUV.y * c);
+    }
 }
 
-float randomLowChance (vec2 st) {
-    return fract(sin(dot(st.xy,
-                         vec2(12.9898,78.233)))*
-        43758.5453123);
-}
-
-float d4 = 0.0;
+float outerBlur = 0.0;
+float innerBlur = 0.0;
+vec3 xDisplace = vec3(0.0);
+vec3 yDisplace = vec3(0.0);
+vec3 colorDots = vec3(0.0);
 
 void main() {
     vec2 uv = vUv * 2.0 - 1.0;
-    float x = vUv.x;
-    float y = vUv.y;
-    float xy = x * y;
-
-    float d = drawCircle(uv, vec3(0.0, 0.0, 0.3));
-    float d2 = drawCircle(uv, vec3(-0.5, 0.7, 0.25));
-    float d3 = max(d, d2);
 
     for (int i = 0; i < 10; i++) {
         vec3 circle = uCircles[i];
         if(circle.z == 0.0) continue;
-        float d = drawCircle(uv, circle);
-        d4 = max(d4, d);
+        float d = drawCircle(uv, circle, uBlur);
+        outerBlur = max(outerBlur, d);
     }
 
-    vec3 colors = vec3(1.0) * d4;
-    gl_FragColor = vec4(colors, 1.0);
+    for (int i = 0; i < 10; i++) {
+        vec3 circle = uCircles[i];
+        if(circle.z == 0.0) continue;
+        float d = drawCircle2(uv, circle, uBlur);
+        innerBlur = max(innerBlur, d);
+    }
+
+    for (int i = 0; i < 10; i++) {
+        vec3 circle = uCircles[i];
+        if(circle.z == 0.0) continue;
+        vec3 d = ColorSprite(uv, circle);
+        colorDots = max(colorDots, d);
+    }
+
+    for (int i = 0; i < 10; i++) {
+        vec3 circle = uCircles[i];
+        if(circle.z == 0.0) continue;
+        vec3 d = DisplaceSprite(uv, circle);
+        xDisplace = max(xDisplace, d);
+    }
+
+    vec3 gradient = vec3(1.0, 1.0, 1.0);
+    vec3 colors = gradient * outerBlur * uBlur;
+    vec3 colors2 = gradient * innerBlur;
+    vec3 colors3 = vec3(0.0) + colorDots;
+    vec3 colors4 = vec3(0.0) + xDisplace;
+    
+    //gl_FragColor = vec4(colors + colors2, 1.0);
+    //gl_FragColor = vec4(vUv.x, vUv.y, 1.0, 1.0);
+    vec3 lol = DisplaceSprite(uv, uCircles[0]);
+    vec3 dotlol = ColorSprite(uv, vec3(uCircles[0].x, 0.0, 0.4));
+
+    float blur = uBlur; // 0.122;
+    float ddd = drawCircle2(uv, vec3(uCircles[0].x, 0.0, uCircles[0].z), blur);
+    vec3 dotlol2 = vec3(0.0, 0.0, ddd);
+
+    gl_FragColor = vec4(max(lol, dotlol2), 1.0);
 }
 
