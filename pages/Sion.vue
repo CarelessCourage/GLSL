@@ -6,9 +6,11 @@ import foldFragment from '../shaders/sion/fragment.glsl'
 const subdivisions = ref(260)
 const blur = ref(0.001)
 const size = ref(0.4)
+const x = ref(0.0)
+const y = ref(0.0)
 
 const circles = ref([
-  new Vector3( -0.0, 0.0, size.value ),
+  new Vector3( x.value, y.value, size.value ),
   new Vector3( 0.0, 0.0, 0.0 ),
   new Vector3( 0.0, 0.0, 0.0 ),
   new Vector3( 0.0, 0.0, 0.0 ),
@@ -20,7 +22,9 @@ const circles = ref([
   new Vector3( 0.0, 0.0, 0.0 )
 ])
 
-watch(size, () => {
+watch([size, x, y], () => {
+  circles.value[0].setX(x.value)
+  circles.value[0].setY(y.value)
   circles.value[0].setZ(size.value)
 })
 
@@ -61,6 +65,10 @@ onLoop(({ elapsed }) => {
     <URange v-model="blur" name="range" :min="0.001" :max="1.0" :step="0.001" />
     <p>size: {{ size }}</p>
     <URange v-model="size" name="range" :min="0.1" :max="1.0" :step="0.001" />
+    <p>x: {{ x }}</p>
+    <URange v-model="x" name="range" :min="-1.0" :max="1.0" :step="0.001" />
+    <p>y: {{ y }}</p> 
+    <URange v-model="y" name="range" :min="-1.0" :max="1.0" :step="0.001" />
     <UButton @click="() => randomizeCircles(6)">Rand</UButton>
   </div>
   <div class="tres">
