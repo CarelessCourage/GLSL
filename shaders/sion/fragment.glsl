@@ -4,6 +4,7 @@ uniform float uTime;
 uniform float uBlur;
 uniform float uSeed;
 uniform vec3 uCircles[10];
+uniform float uSize;
 
 varying vec2 vUv;
 varying vec3 vNormal;
@@ -51,7 +52,7 @@ vec2 localUV(vec2 uv, vec3 circle) {
     vec2 localUV = vec2(UvX, UvY);
     
     float blur = 0.00122;
-    float c = drawCircle2(uv, circle, blur);
+    float c = drawCircle2(uv, vec3(circle.xy, circle.z + uSize), blur);
     
     return vec2(localUV.x * c, localUV.y * c);
 }

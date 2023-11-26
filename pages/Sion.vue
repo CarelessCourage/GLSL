@@ -5,7 +5,7 @@ import foldFragment from '../shaders/sion/fragment.glsl'
 
 const subdivisions = ref(260)
 const blur = ref(0.001)
-const size = ref(0.4)
+const size = ref(0.0)
 const x = ref(0.0)
 const y = ref(0.0)
 
@@ -22,10 +22,9 @@ const circles = ref([
   new Vector3( 0.0, 0.0, 0.0 )
 ])
 
-watch([size, x, y], () => {
+watch([x, y], () => {
   circles.value[0].setX(x.value)
   circles.value[0].setY(y.value)
-  circles.value[0].setZ(size.value)
 })
 
 function clamp(value: number, min: number, max: number) {
@@ -40,9 +39,9 @@ function randomizeCircles(amount: number) {
   }
 }
 
-// onMounted(() => {
-//   randomizeCircles(6)
-// })
+onMounted(() => {
+  randomizeCircles(6)
+})
 
 const meshRef = ref<any>(null)
 const materialRef = ref<any>(null)
@@ -51,6 +50,7 @@ const uniforms = {
   uBlur: { value: blur.value },
   uSeed: { value: 6.7 },
   uCircles: { value: circles.value },
+  uSize: { value: size.value },
 }
 
 const { onLoop, resume } = useRenderLoop()
@@ -60,6 +60,7 @@ onLoop(({ elapsed }) => {
   meshRef.value.material.uniforms.uTime.value = elapsed
   meshRef.value.material.uniforms.uBlur.value = blur.value
   meshRef.value.material.uniforms.uCircles.value = circles.value
+  meshRef.value.material.uniforms.uSize.value = size.value
 })
 </script>
 
