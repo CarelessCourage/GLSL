@@ -10,9 +10,9 @@ const x = ref(0.0)
 const y = ref(0.0)
 
 const circles = ref([
+  new Vector3( x.value - 0.2, y.value + 0.2, size.value ),
   new Vector3( x.value, y.value, size.value ),
-  new Vector3( 0.0, 0.0, 0.0 ),
-  new Vector3( 0.0, 0.0, 0.0 ),
+  new Vector3( x.value + 0.2, y.value + -0.2, size.value ),
   new Vector3( 0.0, 0.0, 0.0 ),
   new Vector3( 0.0, 0.0, 0.0 ),
   new Vector3( 0.0, 0.0, 0.0 ),
@@ -39,6 +39,10 @@ function randomizeCircles(amount: number) {
     circles.value[i].setZ(clamp(Math.random() / 2.0, 0.005, 0.4))
   }
 }
+
+// onMounted(() => {
+//   randomizeCircles(6)
+// })
 
 const meshRef = ref<any>(null)
 const materialRef = ref<any>(null)
