@@ -36,7 +36,7 @@ float remap(float value, float oldMin, float oldMax, float newMin, float newMax)
     return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;
 }
 
-vec3 localUV(vec2 uv, vec3 circle) {
+vec2 localUV(vec2 uv, vec3 circle) {
     float radius = circle.z;
 
     float fromX = circle.x - radius * 1.5;
@@ -53,12 +53,12 @@ vec3 localUV(vec2 uv, vec3 circle) {
     float blur = 0.00122;
     float c = drawCircle2(uv, circle, blur);
     
-    return vec3(localUV.x * c, localUV.y * c, localUV.y * c);
+    return vec2(localUV.x * c, localUV.y * c);
 }
 
 float outerBlur = 0.0;
 float innerBlur = 0.0;
-vec3 displace = vec3(0.0);
+vec2 displaceUVs = vec2(0.0);
 vec3 colorDots = vec3(0.0);
 
 void main() {
@@ -89,11 +89,11 @@ void main() {
         vec3 circle = uCircles[i];
         vec3 circle2 = uCircles[i + 1];
         if(circle.z == 0.0) continue;
-        vec3 luv = localUV(uv, circle);
-        displace = max(displace, luv);
+        vec2 luv = localUV(uv, circle);
+        displaceUVs = max(displaceUVs, luv);
 
-        if(luv != vec3(0.0)) {
-            displace = luv;
+        if(luv != vec2(0.0)) {
+            displaceUVs = luv;
         }
     }
 
@@ -102,11 +102,11 @@ void main() {
     vec3 innerAlpha = gradient * innerBlur;
     vec3 alpha = outerAlpha + innerAlpha;
 
-    vec3 circleColor = vec3(0.0) + colorDots;
-    vec3 circleUVs = vec3(0.0) + displace;
+    //vec3 circleColor = vec3(0.0) + colorDots;
+    vec3 circleUVs = vec3(0.0) + vec3(displaceUVs, displaceUVs.y);
     
-    vec3 singleCircleColor = vec3(drawCircle2(uv, uCircles[0], uBlur), 0.0, 0.0);
-    vec3 singleCircleUV = localUV(uv, uCircles[0]);
+    //vec3 singleCircleColor = vec3(drawCircle2(uv, uCircles[0], uBlur), 0.0, 0.0);
+    //vec3 singleCircleUV = vec3(localUV(uv, uCircles[0]), 0.0);
 
     gl_FragColor = vec4(circleUVs, 1.0);
 }
