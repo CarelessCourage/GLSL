@@ -4,15 +4,18 @@ import foldVertex from '../shaders/sion/vertex.glsl'
 import foldFragment from '../shaders/sion/fragment.glsl'
 
 const subdivisions = ref(260)
-const blur = ref(0.001)
+const strength = ref(0.7)
+const blur = ref(0.04)
 const size = ref(0.0)
-const x = ref(0.0)
-const y = ref(0.0)
+const x = ref(0.5)
+const y = ref(0.5)
+
+const offset = ref(0.3)
 
 const circles = ref([
-  new Vector3( x.value - 0.2, y.value + 0.2, size.value ),
-  new Vector3( x.value, y.value, size.value ),
-  new Vector3( x.value + 0.2, y.value + -0.2, size.value ),
+  new Vector3( x.value - offset.value, y.value + offset.value, 0.2 ),
+  new Vector3( x.value, y.value, 0.2 ),
+  new Vector3( x.value + offset.value, y.value + -offset.value, 0.2 ),
   new Vector3( 0.0, 0.0, 0.0 ),
   new Vector3( 0.0, 0.0, 0.0 ),
   new Vector3( 0.0, 0.0, 0.0 ),
@@ -39,9 +42,9 @@ function randomizeCircles(amount: number) {
   }
 }
 
-onMounted(() => {
-  randomizeCircles(10)
-})
+// onMounted(() => {
+//   randomizeCircles(10)
+// })
 
 const meshRef = ref<any>(null)
 const materialRef = ref<any>(null)
@@ -51,6 +54,7 @@ const uniforms = {
   uSeed: { value: 6.7 },
   uCircles: { value: circles.value },
   uSize: { value: size.value },
+  uStrength: { value: strength.value }
 }
 
 const { onLoop, resume } = useRenderLoop()
@@ -61,15 +65,16 @@ onLoop(({ elapsed }) => {
   meshRef.value.material.uniforms.uBlur.value = blur.value
   meshRef.value.material.uniforms.uCircles.value = circles.value
   meshRef.value.material.uniforms.uSize.value = size.value
+  meshRef.value.material.uniforms.uStrength.value = strength.value
 })
 </script>
 
 <template>
   <div class="pane">
+    <p>strength: {{ strength }}</p>
+    <URange v-model="strength" name="range" :min="0.0" :max="1.0" :step="0.001" />
     <p>blur: {{ blur }}</p>
     <URange v-model="blur" name="range" :min="0.001" :max="1.0" :step="0.001" />
-    <p>size: {{ size }}</p>
-    <URange v-model="size" name="range" :min="0.1" :max="1.0" :step="0.001" />
     <p>x: {{ x }}</p>
     <URange v-model="x" name="range" :min="-1.0" :max="1.0" :step="0.001" />
     <p>y: {{ y }}</p> 

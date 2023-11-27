@@ -5,6 +5,7 @@ uniform float uBlur;
 uniform float uSeed;
 uniform vec3 uCircles[10];
 uniform float uSize;
+uniform float uStrength;
 
 varying vec2 vUv;
 varying vec3 vNormal;
@@ -72,34 +73,13 @@ vec2 circleUVs = vec2(0.0);
 vec3 colorDots = vec3(0.0);
 
 void main() {
-    vec2 uv = vUv * 2.0 - 1.0;
+    vec2 uv = vUv; //* 2.0 - 1.0;
 
      for (int i = 0; i < 10; i++) {
         vec3 circle = uCircles[i];
         if(circle.z == 0.0) continue;
         float d = drawCircle2(uv, circle, 0.001);
         circleAlpha = max(circleAlpha, d);
-    }
-
-    for (int i = 0; i < 10; i++) {
-        vec3 circle = uCircles[i];
-        if(circle.z == 0.0) continue;
-        float d = drawCircle(uv, circle, uBlur);
-        outerBlur = max(outerBlur, d);
-    }
-
-    for (int i = 0; i < 10; i++) {
-        vec3 circle = uCircles[i];
-        if(circle.z == 0.0) continue;
-        float d = drawCircle2(uv, circle, uBlur);
-        innerBlur = max(innerBlur, d);
-    }
-
-    for (int i = 0; i < 10; i++) {
-        vec3 circle = uCircles[i];
-        if(circle.z == 0.0) continue;
-        vec3 d = ColorSprite(uv, circle);
-        colorDots = max(colorDots, d);
     }
 
     for (int i = 0; i < 10; i++) {
@@ -114,12 +94,39 @@ void main() {
         }
     }
 
+    vec2 dUv = displaceUV(circleAlpha, circleUVs);
+    vec2 mUv = mix(dUv, vUv, uStrength);
+    vec2 cUv = mUv * 2.0 - 1.0;
+    vec2 xUv = mUv;
+
+    vec3 displacement = vec3(xUv, 1.0);
+
+    for (int i = 0; i < 10; i++) {
+        vec3 circle = uCircles[i];
+        if(circle.z == 0.0) continue;
+        float d = drawCircle(xUv, circle, uBlur);
+        outerBlur = max(outerBlur, d);
+    }
+
+    for (int i = 0; i < 10; i++) {
+        vec3 circle = uCircles[i];
+        if(circle.z == 0.0) continue;
+        float d = drawCircle2(xUv, circle, uBlur);
+        innerBlur = max(innerBlur, d);
+    }
+
+    for (int i = 0; i < 10; i++) {
+        vec3 circle = uCircles[i];
+        if(circle.z == 0.0) continue;
+        vec3 d = ColorSprite(uv, circle);
+        colorDots = max(colorDots, d);
+    }
+
     //Blurs
     float outerBlur = outerBlur * uBlur;
     float circleBlur = outerBlur + innerBlur;
+    vec3 blur = vec3(circleBlur);
 
-    vec2 dUv = displaceUV(circleAlpha, circleUVs);
-
-    gl_FragColor = vec4(dUv, 1.0, 1.0);
+    gl_FragColor = vec4(blur, 1.0);
 }
 
