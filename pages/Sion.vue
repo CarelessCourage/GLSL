@@ -40,7 +40,7 @@ function randomizeCircles(amount: number) {
 }
 
 onMounted(() => {
-  randomizeCircles(6)
+  randomizeCircles(10)
 })
 
 const meshRef = ref<any>(null)
@@ -74,7 +74,7 @@ onLoop(({ elapsed }) => {
     <URange v-model="x" name="range" :min="-1.0" :max="1.0" :step="0.001" />
     <p>y: {{ y }}</p> 
     <URange v-model="y" name="range" :min="-1.0" :max="1.0" :step="0.001" />
-    <UButton @click="() => randomizeCircles(6)">Rand</UButton>
+    <UButton @click="() => randomizeCircles(10)">Rand</UButton>
   </div>
   <div class="tres">
     <TresCanvas clear-color="#111" shadows alpha :windowSize="true">
