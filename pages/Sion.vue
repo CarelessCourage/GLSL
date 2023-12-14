@@ -1,27 +1,44 @@
 <script setup lang="ts">
-import { Vector3 } from 'three'
+import { Vector3, Vector2 } from 'three'
 import foldVertex from '../shaders/sion/vertex.glsl'
 import foldFragment from '../shaders/sion/fragment.glsl'
 
 const subdivisions = ref(260)
-const strength = ref(0.7)
+const strength = ref(0.0)
 const blur = ref(0.04)
 const size = ref(0.0)
+const uvOrigin = ref({
+  x: 0.5,
+  y: 0.5,
+  scale: 0.242
+})
 const x = ref(0.5)
 const y = ref(0.5)
 
 const offset = ref(0.3)
+const offset2 = ref({
+  x: 0.5,
+  y: 0.5
+})
+
+const offsetLol = computed(() => {
+  const lol = 0.0;
+  return {
+    x: offset2.value.x + lol,
+    y: offset2.value.y - lol
+  }
+})
 
 const circles = ref([
-  new Vector3( x.value - offset.value, y.value + offset.value, 0.2 ),
-  new Vector3( x.value, y.value, 0.2 ),
-  new Vector3( x.value + offset.value, y.value + -offset.value, 0.2 ),
-  new Vector3( 0.0, 0.0, 0.0 ),
-  new Vector3( 0.0, 0.0, 0.0 ),
-  new Vector3( 0.0, 0.0, 0.0 ),
-  new Vector3( 0.0, 0.0, 0.0 ),
-  new Vector3( 0.0, 0.0, 0.0 ),
-  new Vector3( 0.0, 0.0, 0.0 ),
+  new Vector3( 0.25, 0.75, 0.1 ),
+  new Vector3( x.value, y.value, 0.1 ),
+  new Vector3( 0.75, 0.25, 0.1 ),
+  new Vector3( 0.0, 0.0, 0.1 ),
+  new Vector3( 1.0, 1.0, 0.1 ),
+  new Vector3( 0.0, 1.0, 0.1 ),
+  new Vector3( 1.0, 0.0, 0.1 ),
+  new Vector3( 0.0, 0.5, 0.1 ),
+  new Vector3( 1.0, 0.5, 0.1 ),
   new Vector3( 0.0, 0.0, 0.0 )
 ])
 
@@ -54,7 +71,9 @@ const uniforms = {
   uSeed: { value: 6.7 },
   uCircles: { value: circles.value },
   uSize: { value: size.value },
-  uStrength: { value: strength.value }
+  uStrength: { value: strength.value },
+  uvOrigin: { value: new Vector3(uvOrigin.value.x, uvOrigin.value.y, uvOrigin.value.scale) },
+  uOffset: { value: new Vector2(offset2.value.x, offset2.value.y) },
 }
 
 const { onLoop, resume } = useRenderLoop()
@@ -66,19 +85,21 @@ onLoop(({ elapsed }) => {
   meshRef.value.material.uniforms.uCircles.value = circles.value
   meshRef.value.material.uniforms.uSize.value = size.value
   meshRef.value.material.uniforms.uStrength.value = strength.value
+  meshRef.value.material.uniforms.uvOrigin.value = new Vector3(uvOrigin.value.x, uvOrigin.value.y, uvOrigin.value.scale),
+  meshRef.value.material.uniforms.uOffset.value = new Vector2(offsetLol.value.x, offsetLol.value.y)
 })
 </script>
 
 <template>
   <div class="pane">
-    <p>strength: {{ strength }}</p>
-    <URange v-model="strength" name="range" :min="0.0" :max="1.0" :step="0.001" />
-    <p>blur: {{ blur }}</p>
-    <URange v-model="blur" name="range" :min="0.001" :max="1.0" :step="0.001" />
-    <p>x: {{ x }}</p>
-    <URange v-model="x" name="range" :min="-1.0" :max="1.0" :step="0.001" />
-    <p>y: {{ y }}</p> 
-    <URange v-model="y" name="range" :min="-1.0" :max="1.0" :step="0.001" />
+    <div>
+      <p>origin scale: {{ uvOrigin.scale }}</p>
+      <URange v-model="uvOrigin.scale" name="range" :min="0.0" :max="10.0" :step="0.001" />
+    </div>
+    <div v-if="true">
+      <p>blur: {{ blur }}</p>
+      <URange v-model="blur" name="range" :min="0.001" :max="1.0" :step="0.001" />
+    </div>
     <UButton @click="() => randomizeCircles(10)">Rand</UButton>
   </div>
   <div class="tres">
