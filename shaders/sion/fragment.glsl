@@ -2,6 +2,7 @@ precision mediump float;
 uniform vec4 resolution;
 uniform float uTime;
 uniform float uBlur;
+uniform float uAlphaBlur;
 uniform float uSeed;
 uniform vec3 uCircles[10];
 uniform float uSize;
@@ -34,7 +35,7 @@ float drawCircle2(vec2 uv, vec3 circle, float blur){
 }
 
 vec3 ColorSprite(vec2 uv, vec3 circle) {
-    float blur = 0.122;
+    float blur = uBlur;
     float c = drawCircle2(uv, circle, blur);
     if (c > 0.) {
         return vec3(vUv.x * c, vUv.y * c, 1.0 * c);
@@ -100,6 +101,7 @@ vec2 combineUV(float alpha, vec2 circleUVs) {
 }
 
 float circleAlpha = 0.0;
+float outerCircleAlpha = 0.0;
 float outerBlur = 0.0;
 float innerBlur = 0.0;
 vec2 circleUVs = vec2(0.0);
@@ -109,8 +111,10 @@ vec2 displaceUV(vec2 uv) {
     for (int i = 0; i < 10; i++) {
         vec3 circle = uCircles[i];
         if(circle.z == 0.0) continue;
-        float d = drawCircle2(uv, circle, 0.001);
+        float d = drawCircle2(uv, circle, uAlphaBlur);
+        float d2 = drawCircle2(uv, circle, uAlphaBlur);
         circleAlpha = max(circleAlpha, d);
+        outerCircleAlpha = max(outerCircleAlpha, d2);
     }
 
     for (int i = 0; i < 10; i++) {
@@ -129,8 +133,11 @@ vec2 displaceUV(vec2 uv) {
     }
 
     vec2 dUv = combineUV(circleAlpha, circleUVs);
-    vec2 mUv = mix(dUv, vUv, uStrength);
-    return mUv;
+
+    vec2 test = mix(vec2(circleAlpha), circleUVs, circleAlpha);
+    vec2 mUv = mix(vUv, test, circleAlpha);
+    vec2 mUv2 = mix(mUv, vUv, uStrength);
+    return mUv2;
 }
 
 void main() {

@@ -4,13 +4,15 @@ import foldVertex from '../shaders/sion/vertex.glsl'
 import foldFragment from '../shaders/sion/fragment.glsl'
 
 const subdivisions = ref(260)
-const strength = ref(0.0)
+const strength = ref(1.0)
+const inverseStrength = computed(() => 1.0 - strength.value)
 const blur = ref(0.04)
+const alphaBlur = ref(0.4)
 const size = ref(0.0)
 const uvOrigin = ref({
   x: 0.5,
   y: 0.5,
-  scale: 0.242
+  scale: 7.42
 })
 const x = ref(0.5)
 const y = ref(0.5)
@@ -68,10 +70,11 @@ const materialRef = ref<any>(null)
 const uniforms = {
   uTime: { value: 0 },
   uBlur: { value: blur.value },
+  uAlphaBlur: { value: alphaBlur.value },
   uSeed: { value: 6.7 },
   uCircles: { value: circles.value },
   uSize: { value: size.value },
-  uStrength: { value: strength.value },
+  uStrength: { value: inverseStrength.value },
   uvOrigin: { value: new Vector3(uvOrigin.value.x, uvOrigin.value.y, uvOrigin.value.scale) },
   uOffset: { value: new Vector2(offset2.value.x, offset2.value.y) },
 }
@@ -82,9 +85,10 @@ onLoop(({ elapsed }) => {
   if (!meshRef.value) return
   meshRef.value.material.uniforms.uTime.value = elapsed
   meshRef.value.material.uniforms.uBlur.value = blur.value
+  meshRef.value.material.uniforms.uAlphaBlur.value = alphaBlur.value
   meshRef.value.material.uniforms.uCircles.value = circles.value
   meshRef.value.material.uniforms.uSize.value = size.value
-  meshRef.value.material.uniforms.uStrength.value = strength.value
+  meshRef.value.material.uniforms.uStrength.value = inverseStrength.value
   meshRef.value.material.uniforms.uvOrigin.value = new Vector3(uvOrigin.value.x, uvOrigin.value.y, uvOrigin.value.scale),
   meshRef.value.material.uniforms.uOffset.value = new Vector2(offsetLol.value.x, offsetLol.value.y)
 })
@@ -94,11 +98,15 @@ onLoop(({ elapsed }) => {
   <div class="pane">
     <div>
       <p>origin scale: {{ uvOrigin.scale }}</p>
-      <URange v-model="uvOrigin.scale" name="range" :min="0.0" :max="10.0" :step="0.001" />
+      <URange v-model="uvOrigin.scale" name="range" :min="0.01" :max="10.0" :step="0.001" />
+      <p>strength: {{ strength }}</p>
+      <URange v-model="strength" name="range" :min="0.0" :max="1.0" :step="0.001" />
     </div>
     <div v-if="true">
       <p>blur: {{ blur }}</p>
       <URange v-model="blur" name="range" :min="0.001" :max="1.0" :step="0.001" />
+      <p>alpha blur: {{ alphaBlur }}</p>
+      <URange v-model="alphaBlur" name="range" :min="0.001" :max="1.0" :step="0.001" />
     </div>
     <UButton @click="() => randomizeCircles(10)">Rand</UButton>
   </div>
