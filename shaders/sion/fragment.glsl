@@ -100,14 +100,11 @@ vec2 combineUV(float alpha, vec2 circleUVs) {
     }
 }
 
-float circleAlpha = 0.0;
-float outerCircleAlpha = 0.0;
-float outerBlur = 0.0;
-float innerBlur = 0.0;
-vec2 circleUVs = vec2(0.0);
-vec3 colorDots = vec3(0.0);
 
 vec2 displaceUV(vec2 uv) {
+    float circleAlpha = 0.0;
+    float outerCircleAlpha = 0.0;
+    vec2 circleUVs = vec2(0.0);
     for (int i = 0; i < 10; i++) {
         vec3 circle = uCircles[i];
         if(circle.z == 0.0) continue;
