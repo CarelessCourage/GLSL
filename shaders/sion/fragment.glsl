@@ -77,7 +77,6 @@ vec2 localUV(vec2 uv, vec3 circle) {
 
     float fromX = circle.x - radius * 1.5;
     float toX = circle.x + radius * 2.5;
-
     float fromY = circle.y - radius * 1.5;
     float toY = circle.y + radius * 2.5;
 
@@ -99,7 +98,6 @@ vec2 combineUV(float alpha, vec2 circleUVs) {
         return vUv;
     }
 }
-
 
 vec2 displaceUV(vec2 uv) {
     float circleAlpha = 0.0;
@@ -180,13 +178,12 @@ vec3 getBlur(vec2 uv) {
 
 void main() {
     vec2 uv = vUv;
-    vec2 yUv = displaceUV(uv);
-    vec2 xUv = yUv;
+    vec2 displacedUv = displaceUV(uv);
 
-    vec3 displacement = vec3(yUv.y, yUv.x, 0.0);
+    vec3 displacement = vec3(displacedUv.y, displacedUv.x, displacedUv.x);
     vec3 blur = getBlur(uv);
     vec3 colorDots = getColorDots(uv);
 
-    gl_FragColor = vec4(displacement, 1.0);
+    gl_FragColor = vec4(blur, 1.0);
 }
 
